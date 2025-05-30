@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <springProfile name="default">
+        <property name="LOG_PATH" value="./logs"/>
+        <logger name="com.example.api_gestion_almacen" level="DEBUG"/>
+    </springProfile>
+    <springProfile name="prod">
+        <property name="LOG_PATH" value="/var/log/api-gestion-almacen"/>
+        <logger name="com.example.api_gestion_almacen" level="INFO"/>
+    </springProfile>
+    
+    <!-- Appender para consola -->
+    <appender name="Console" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{HH:mm:ss} %-5level - %msg%n</pattern>
+        </encoder>
+    </appender>
+    
+    <!-- Appender para archivo -->
+    <appender name="File" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_PATH}/Sistema_log.txt</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_PATH}/Sistema_%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <maxFileSize>100MB</maxFileSize>
+            <maxHistory>30</maxHistory>
+            <totalSizeCap>3GB</totalSizeCap>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d{HH:mm:ss} %-5level - %msg%n</pattern>
+        </encoder>
+    </appender>
+    
+    <!-- Configuración de niveles de log -->
+    <root level="WARN">
+        <appender-ref ref="Console"/>
+        <appender-ref ref="File"/>
+    </root>
+    
+    <!-- Silenciar logs de Spring -->
+    <logger name="org.springframework" level="WARN"/>
+    <logger name="org.hibernate" level="WARN"/>
+    <logger name="com.zaxxer.hikari" level="WARN"/>
+</configuration>
